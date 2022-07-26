@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/">
             <img src="{{ asset('assets/images/logo.png') }}" alt="">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,14 +21,27 @@
                     <a class="nav-link" href="#">Business</a>
                 </li>
             </ul>
-            <div class="d-flex">
-                <a href="#" class="btn btn-master btn-secondary me-3">
-                    Sign In
-                </a>
-                <a href="#" class="btn btn-master btn-primary">
-                    Sign Up
-                </a>
-            </div>
+            
+            @auth
+                <div class="d-flex user-logged">
+                    <a href="#">
+                        Halo, Beatrice!
+                        <img src="{{ asset('assets/images/user_photo.png') }}" class="user-photo" alt="">
+                    </a>
+                </div>
+            @endauth
+
+            @guest    
+                <div class="d-flex">
+                    <a href="/login" class="btn btn-master btn-secondary me-3">
+                        Sign In
+                    </a>
+                    <a href="#" class="btn btn-master btn-primary">
+                        Sign Up
+                    </a>
+                </div>
+            @endguest
+    
         </div>
     </div>
 </nav>

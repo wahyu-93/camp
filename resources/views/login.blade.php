@@ -17,7 +17,7 @@
             Because tomorrow become never
         </p>
         <p>
-            <a class="btn btn-border btn-google-login" href="#">
+            <a class="btn btn-border btn-google-login" href="{{ route('login.google') }}">
                 <img src="{{ asset('assets/images/ic_google.svg') }}" class="icon" alt=""> Sign In with Google
             </a>
         </p>

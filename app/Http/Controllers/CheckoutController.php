@@ -21,12 +21,13 @@ class CheckoutController extends Controller
 
     public function store(Request $request, Camp $camp)
     {
+        $expiredValidation = date('Y-m', time());
         $this->validate($request, [
             'name'  => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email,'.auth()->user()->id,
             'occupation' => 'required',
             'card-number' => 'required',
-            'expired'   => 'required',
+            'expired'   => 'required|date|date_format:Y-m|after_or_equal:'.$expiredValidation,
             'cvc'       => 'required'
         ]);
 

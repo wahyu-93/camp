@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,11 +19,17 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
-Route::get('checkout/{camp}', [CheckoutController::class, 'checkout'])->name('checkout');
-Route::post('checkout/{camp}', [CheckoutController::class, 'store'])->name('checkout.store');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+
+Route::middleware(['auth'])->group(function(){
+    Route::get('checkout/{camp}', [CheckoutController::class, 'checkout'])->name('checkout');
+    Route::post('checkout/{camp}', [CheckoutController::class, 'store'])->name('checkout.store');
+
+    Route::get('dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
+});
+
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';

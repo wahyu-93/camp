@@ -8,8 +8,14 @@ use Illuminate\Http\Request;
 
 class CheckoutController extends Controller
 {
-    public function checkout(Camp $camp)
+    public function checkout(Camp $camp, Request $request)
     {
+        // validasi jika sudah teregister di camp
+        if($camp->isRegistered){
+            $request->session()->flash('error', 'you have already registered on ' . $camp->title . ' camp');
+            return redirect()->route('dashboard');
+        }
+
         return view('checkout', compact('camp'));
     }
 

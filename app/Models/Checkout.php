@@ -12,6 +12,15 @@ class Checkout extends Model
 
     protected $guarded = ['id'];
 
+    public function setExpiredAttribute($value)
+    {
+        // Y-m-d (awal tgl dalam bulan)
+        // $this->attributes['expired'] = date('Y-m-d', strtotime($value));
+        
+        // Y-m-t (akhir tgl dalam bulan)
+        $this->attributes['expired'] = date('Y-m-t', strtotime($value));
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

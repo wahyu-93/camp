@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@section('title', 'Login')
+@section('title', 'Success Checkout')
 
 @section('content')
 <section class="checkout">

@@ -12,6 +12,11 @@ class Camp extends Model
 
     protected $guarded = ['id'];
 
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     public function campBenefits()
     {
         return $this->hasMany(campBenefits::class);

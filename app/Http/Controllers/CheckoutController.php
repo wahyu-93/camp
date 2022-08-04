@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\checkout\afterCheckout;
 use App\Models\Camp;
 use App\Models\Checkout;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
@@ -32,7 +34,7 @@ class CheckoutController extends Controller
         ]);
 
         // nyimpan ke table checkout
-        auth()->user()->checkouts()->create([
+        $checkout = auth()->user()->checkouts()->create([
             'camp_id'     => $camp->id, 
             'card_number' => $request['card-number'],
             'expired'     => $request['expired'],
@@ -43,6 +45,9 @@ class CheckoutController extends Controller
         auth()->user()->update([
             'occupation'    => $request['occupation']
         ]);
+
+        // kirim email
+        Mail::to(auth()->user()->email)->send(new afterCheckout($checkout));
 
         return view('success-checkout');
         

@@ -15,7 +15,7 @@ class CheckoutController extends Controller
         // validasi jika sudah teregister di camp
         if($camp->isRegistered){
             $request->session()->flash('error', 'you have already registered on ' . $camp->title . ' camp');
-            return redirect()->route('dashboard');
+            return redirect()->route('user.dashboard');
         }
 
         return view('checkout', compact('camp'));

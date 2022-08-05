@@ -9,9 +9,12 @@ use Auth;
 class HomeController extends Controller
 {
     public function dashboard()
-    {
-        $checkouts = Checkout::with('user', 'camp')->whereUserId(Auth::id())->get();
-        
-        return view('dashboardUser', compact('checkouts'));
+    {   
+        if(auth()->user()->is_admin){
+            return redirect()->route('admin.dashboard');
+        }
+        else{
+            return redirect()->route('user.dashboard');
+        };
     }
 }

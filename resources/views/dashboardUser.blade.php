@@ -24,6 +24,7 @@
                             <td width="18%">
                                 <img src="{{ asset('assets/images/item_bootcamp.png') }}" height="120" alt="">
                             </td>
+                            
                             <td>
                                 <p class="mb-2">
                                     <strong>{{ $checkout->camp->title }}</strong>
@@ -32,9 +33,11 @@
                                     {{ date('Y-m', strtotime($checkout->expired)) }}
                                 </p>
                             </td>
+                            
                             <td>
                                 <strong>${{ number_format($checkout->camp->price) }}</strong>
                             </td>
+                            
                             <td>
                                 @if($checkout->is_paid)
                                     <strong class="text-success">Payment Success</strong>                                        
@@ -42,6 +45,17 @@
                                     <strong>Waiting for Payment</strong>    
                                 @endif
                             </td>
+
+                            @if (auth()->user()->is_admin)
+                                <td>
+                                    <strong>{{ auth()->user()->name }}</strong>
+                                </td>    
+                            @endif
+                            
+                            <td>
+
+                            </td>
+
                             <td>
                                 <a href="#" class="btn btn-primary">
                                     Contact Support

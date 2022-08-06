@@ -28,17 +28,11 @@ class CheckoutController extends Controller
             'name'  => 'required',
             'email' => 'required|email|unique:users,email,'.auth()->user()->id,
             'occupation' => 'required',
-            'card-number' => 'required',
-            'expired'   => 'required|date|date_format:Y-m|after_or_equal:'.$expiredValidation,
-            'cvc'       => 'required'
         ]);
 
         // nyimpan ke table checkout
         $checkout = auth()->user()->checkouts()->create([
             'camp_id'     => $camp->id, 
-            'card_number' => $request['card-number'],
-            'expired'     => $request['expired'],
-            'cvc'         => $request['cvc'],
         ]);
 
         // sipan occupation table user

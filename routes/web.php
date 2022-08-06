@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group(function(){
 
     Route::prefix('admin/dashboard')->name('admin.')->group(function(){
         Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::patch('/{checkout}/update', [AdminDashboardController::class, 'updatePaid'])->name('update.paid');
     });
 });
 

@@ -11,6 +11,7 @@ class Checkout extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded = ['id'];
+    protected $with = ['user', 'camp'];
 
     public function setExpiredAttribute($value)
     {

@@ -12,6 +12,6 @@ class AdminDashboardController extends Controller
     {
         $checkouts = Checkout   ::with('user', 'camp')->get();
         
-        return view('dashboardUser', compact('checkouts'));
+        return view('dashboardAdmin', compact('checkouts'));
     }
 }

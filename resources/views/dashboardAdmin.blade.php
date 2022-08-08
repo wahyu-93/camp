@@ -33,17 +33,20 @@
                     <tr>
                         <td>{{ $checkout->user->name }}</td>
                         <td>{{ $checkout->camp->title }}</td>
-                        <td>{{ $checkout->camp->price }}</td>
+                        <td>
+                            {{ number_format($checkout->total) }}
+                            <span class="badge bg-info text-dark">Disc {{ $checkout->discount_percentage }} %</span>
+                        </td>
                         <td>{{ date('M d Y', strtotime($checkout->created_at)) }}</td>
                         <td>
-                            @if($checkout->is_paid)
+                            @if($checkout->payment_status=="paid")
                                 <span class="badge bg-success">Paid</span>
                             @else
                                 <span class="badge bg-warning">Waiting</span>
                             @endif
                         </td>
                         <td>
-                            @if (!$checkout->is_paid)
+                            @if($checkout->payment_status!="paid")
                                 <form action="{{ route('admin.update.paid', $checkout) }}" method="POST">
                                     @csrf
                                     @method('patch')

@@ -11,7 +11,7 @@ class Checkout extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded = ['id'];
-    protected $with = ['user', 'camp'];
+    protected $with = ['user', 'camp', 'discount'];
 
     public function setExpiredAttribute($value)
     {
@@ -30,5 +30,10 @@ class Checkout extends Model
     public function camp()
     {
         return $this->belongsTo(Camp::class);
+    }
+
+    public function discount()
+    {
+        return $this->belongsTo(Discount::class);
     }
 }

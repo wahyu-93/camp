@@ -11,6 +11,8 @@
 
     @include('components.navbar')
     {{-- @include('layouts.navigation') --}}
+    
+    @include('components.alert')
 
     @yield('content')
 

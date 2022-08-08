@@ -41,6 +41,12 @@
                                 <a href="" class="dropdown-item text-end">My Profile</a>
                             </li>
 
+                            @if(auth()->user()->is_admin)
+                                <li>
+                                    <a href="" class="dropdown-item text-end">Discount</a>
+                                </li>
+                            @endif
+
                             <li>
                                 <a href="{{ route('logout') }}" class="dropdown-item text-end" onclick="event.preventDefault(); getElementById('form-delete').submit();">Logout</a>
 

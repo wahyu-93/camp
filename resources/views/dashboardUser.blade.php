@@ -35,14 +35,15 @@
                             </td>
                             
                             <td>
-                                <strong>{{ number_format($checkout->camp->price) }} K</strong>
+                                <strong>{{ number_format($checkout->total) }} K</strong>
+                                <span class="badge bg-info text-dark">Disc {{ $checkout->discount_percentage }} %</span>
                             </td>
                             
                             <td>
-                                @if($checkout->is_paid)
+                                @if($checkout->payment_status=="paid")
                                     <strong class="text-success">Payment Success</strong>                                        
                                 @else
-                                    <strong>Waiting for Payment</strong>    
+                                    <strong>Waiting for Payment</strong>
                                 @endif
                             </td>
 
@@ -53,11 +54,11 @@
                             @endif
                             
                             <td>
+                                @if($checkout->payment_status!="paid")
+                                    <a href="{{ $checkout->midtrans_url }}" class="btn btn-primary btn-sm">Pay Here</a>
+                                @endif
 
-                            </td>
-
-                            <td>
-                                <a href="#" class="btn btn-primary">
+                                <a href="" class="btn btn-primary btn-sm">
                                     Contact Support
                                 </a>
                             </td>

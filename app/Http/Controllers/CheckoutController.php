@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\checkout\afterCheckout;
 use App\Models\Camp;
 use App\Models\Checkout;
+use App\Models\Discount;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -40,13 +41,23 @@ class CheckoutController extends Controller
             'email' => 'required|email|unique:users,email,'.auth()->user()->id,
             'occupation' => 'required',
             'phone' => 'required|integer',
-            'address' => 'required'
+            'address' => 'required',
+            'discount' => 'nullable|exists:discounts,code,deleted_at,NULL'
         ]);
 
+        $data = $request->all();
+              
+        if($request->discount){
+            $disc = Discount::whereCode($request->discount)->first();
+            
+            $data['discount_id'] = $disc->id;
+            $data['discount_percentage'] = $disc->percentage;
+        };
+
+        $data['camp_id'] = $camp->id;
+        
         // nyimpan ke table checkout
-        $checkout = auth()->user()->checkouts()->create([
-            'camp_id'     => $camp->id, 
-        ]);
+        $checkout = auth()->user()->checkouts()->create($data);
 
         // sipan occupation table user
         auth()->user()->update([
@@ -55,11 +66,9 @@ class CheckoutController extends Controller
             'address' => $request->address
         ]);
 
-
         // midtrans
         $this->getSnapRedirect($checkout);
-        // $this->midtransCallback();
-
+    
         // kirim email
         Mail::to(auth()->user()->email)->send(new afterCheckout($checkout));
 
@@ -73,16 +82,28 @@ class CheckoutController extends Controller
 
         $checkout->midtrans_booking_code = $orderId;
 
-        $transaction_detail = [
-            'order_id' => $orderId,
-            'gross_amount' => $price,
-        ];
-
         $items_detail[] = [
             'id'    => $orderId,
             'price' => $price,
             'quantity' => 1,
             'name'  => "payment for {$checkout->camp->title} Camp"
+        ];
+
+        $discount = 0;
+        if($checkout->discount){
+            $discount = $price * ($checkout->discount_percentage / 100);            
+            $items_detail[] = [
+                'id'    => $orderId,
+                'price' => -$discount,
+                'quantity' => 1,
+                'name'  => "payment for {$checkout->camp->title} Camp with discount {$checkout->discount_percentage} %"
+            ];
+        };
+        
+        $total = $price - $discount;
+        $transaction_detail = [
+            'order_id' => $orderId,
+            'gross_amount' => $total,
         ];
 
         $userData = [
@@ -108,10 +129,11 @@ class CheckoutController extends Controller
             'customer_details'       => $customer_details,
             'item_details'           => $items_detail
         ];
-
+    
         try {
-            $paymentUrl = \Midtrans\Snap::createTransaction(    $midtrans_param)->redirect_url;
+            $paymentUrl = \Midtrans\Snap::createTransaction($midtrans_param)->redirect_url;
             $checkout->midtrans_url = $paymentUrl;
+            $checkout->total = $total;
             $checkout->save();
         } catch (Exception $e) {
             return false;

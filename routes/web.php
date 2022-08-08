@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\UserDashboardController;
@@ -35,9 +36,12 @@ Route::middleware(['auth'])->group(function(){
         Route::get('/', [UserDashboardController::class, 'index'])->name('dashboard');
     });
 
-    Route::prefix('admin/dashboard')->name('admin.')->group(function(){
+    Route::prefix('admin')->name('admin.')->group(function(){
         Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
         Route::patch('/{checkout}/update', [AdminDashboardController::class, 'updatePaid'])->name('update.paid');
+
+        // discount
+        Route::resource('discount', DiscountController::class);        
     });
 });
 

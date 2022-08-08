@@ -90,7 +90,18 @@
                                         <span class="text-danger">{{ $message }}</span>
                                     </small>
                                 @enderror
-                            </div>                          
+                            </div>        
+                            
+                            <div class="mb-4">
+                                <label for="discount" class="form-label">Discount</label>
+                                <input type="text" class="form-control" id="discount" name="discount">
+                                
+                                @error('discount')
+                                    <small>
+                                        <span class="text-danger">{{ $message }}</span>
+                                    </small>
+                                @enderror
+                            </div>
                          
                             <button type="submit" class="w-100 btn btn-primary">Pay Now</button>
                             <p class="text-center subheader mt-4">

@@ -120,59 +120,55 @@ class CheckoutController extends Controller
 
     public function midtransCallback(Request $request)
     { 
-        // instance notification 
-         $notification = $request->method() == 'POST' ? new Notification() : \Midtrans\Transaction::status($request->order_id) ;
-        
-         // assign variable from midtrans 
-         $status = $notification->transaction_status;
-         $type = $notification->payment_type;
-         $fraud = $notification->fraud_status;
-         $order_id = $notification->order_id;       
+        $notif = $request->method() == 'POST' ? new Notification() : \Midtrans\Transaction::status($request->order_id);
 
-         // get transaction id
-         $order = explode('-', $order_id);
- 
-         // search transaction by id
-         $transaction = Checkout::findOrFail($order[1]);
- 
-         // notificaion status
-         if($status == 'capture'){
-             if($type == 'credit_card'){
-                 if($fraud == 'challenge'){
-                     $transaction->status = 'PENDING';
-                 }
-                 else{
-                     $transaction->status = 'SUCCESS';
-                 }
-             }
-         }
-         else if($status == 'settlement'){
-             $transaction->status = 'SUCCESS';
-         }
-         else if($status == 'pending'){
-             $transaction->status = 'PENDING';
-         }
-         else if($status == 'deny'){
-             $transaction->status = 'PENDING';
-         }
-         else if($status == 'expire'){
-             $transaction->status = 'CANCELED';
-         }
-         else if($status == 'cancel'){
-             $transaction->status = 'CANCELED';
-         };
-         dd($transaction->status);
-         // save status from notification
-         $transaction->save();
-         
-        //  // return response json ke midtrans
-        //  return response()->json([
-        //      'meta'  => [
-        //          'code'  => 200,
-        //          'message' => 'Midtrans Transaction Success !'
-        //      ]
-        //  ]);
+        $transaction_status = $notif->transaction_status;
+        $fraud = $notif->fraud_status;
 
-        return view('success-checkout');   
+        $transaction_id = explode('-', $notif->order_id)[0];
+       $checkout = Checkout::find($transaction_id);
+
+        if ($transaction_status == 'capture') {
+            if ($fraud == 'challenge') {
+                // TODO Set payment status in merchant's database to 'challenge'
+               $checkout->payment_status = 'pending';
+            }
+            else if ($fraud == 'accept') {
+                // TODO Set payment status in merchant's database to 'success'
+               $checkout->payment_status = 'paid';
+            }
+        }
+        else if ($transaction_status == 'cancel') {
+            if ($fraud == 'challenge') {
+                // TODO Set payment status in merchant's database to 'failure'
+               $checkout->payment_status = 'failed';
+            }
+            else if ($fraud == 'accept') {
+                // TODO Set payment status in merchant's database to 'failure'
+               $checkout->payment_status = 'failed';
+            }
+        }
+        else if ($transaction_status == 'deny') {
+            // TODO Set payment status in merchant's database to 'failure'
+           $checkout->payment_status = 'failed';
+        }
+        else if ($transaction_status == 'settlement') {
+            // TODO set payment status in merchant's database to 'Settlement'
+           $checkout->payment_status = 'paid';
+        }
+        else if ($transaction_status == 'pending') {
+            // TODO set payment status in merchant's database to 'Pending'
+           $checkout->payment_status = 'pending';
+        }
+        else if ($transaction_status == 'expire') {
+            // TODO set payment status in merchant's database to 'expire'
+           $checkout->payment_status = 'failed';
+        }
+
+       $checkout->save();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Payment success'
+        ]);
     }
 }

@@ -30,12 +30,12 @@
                                     <strong>{{ $checkout->camp->title }}</strong>
                                 </p>
                                 <p>
-                                    {{ date('Y-m', strtotime($checkout->expired)) }}
+                                    {{ date('Y-m-d', strtotime($checkout->created_at)) }}
                                 </p>
                             </td>
                             
                             <td>
-                                <strong>${{ number_format($checkout->camp->price) }}</strong>
+                                <strong>{{ number_format($checkout->camp->price) }} K</strong>
                             </td>
                             
                             <td>

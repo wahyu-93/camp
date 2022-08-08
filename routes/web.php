@@ -22,7 +22,8 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
-
+Route::get('payment/success', [CheckoutController::class, 'midtransCallback']);
+Route::post('payment/success', [CheckoutController::class, 'midtransCallback']);
 
 Route::middleware(['auth'])->group(function(){
     Route::get('checkout/{camp}', [CheckoutController::class, 'checkout'])->name('checkout');

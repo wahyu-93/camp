@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" id="step">
     <div class="row item-step pb-70">
         <div class="col-lg-6 col-12 text-center">
             <img src="{{ asset('assets/images/step1.png') }}" class="cover" alt="">

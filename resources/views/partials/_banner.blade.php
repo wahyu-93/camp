@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" id="banner">
     <div class="row justify-content-center">
         <div class="col-lg-11 col-12">
             <div class="row">

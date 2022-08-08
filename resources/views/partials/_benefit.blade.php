@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" id="benefit">
     <div class="row text-center pb-70">
         <div class="col-lg-12 col-12 header-wrap">
             <p class="story">

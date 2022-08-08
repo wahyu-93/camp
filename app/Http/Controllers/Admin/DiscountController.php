@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Admin\Discount\StoreRequest;
+use App\Http\Requests\Admin\Discount\UpdateRequest;
 use App\Http\Controllers\Controller;
 use App\Models\Discount;
 use Illuminate\Http\Request;
@@ -29,12 +30,14 @@ class DiscountController extends Controller
 
     public function edit(Discount $discount)
     {
-
+        return view('admin.discount.edit', compact('discount'));
     }
 
-    public function update(Discount $discount)
+    public function update(UpdateRequest $request, Discount $discount)
     {
+        $discount->update($request->all());
 
+        return redirect()->route('admin.discount.index')->with('success', 'Discount Has Been Update');
     }
 
     public function destroy(Discount $discount)

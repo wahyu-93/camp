@@ -31,16 +31,16 @@ Route::post('payment/success', [CheckoutController::class, 'midtransCallback']);
 Route::post('login-user',[LoginController::class, 'login'])->name('login.user');
 
 Route::middleware(['auth'])->group(function(){
-    Route::get('checkout/{camp}', [CheckoutController::class, 'checkout'])->name('checkout');
-    Route::post('checkout/{camp}', [CheckoutController::class, 'store'])->name('checkout.store');
+    Route::get('checkout/{camp}', [CheckoutController::class, 'checkout'])->name('checkout')->middleware('ensureUserRole:user');
+    Route::post('checkout/{camp}', [CheckoutController::class, 'store'])->name('checkout.store')->middleware('ensureUserRole:user');
 
     Route::get('dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
 
-    Route::prefix('user/dashboard')->name('user.')->group(function(){
+    Route::prefix('user/dashboard')->name('user.')->middleware('ensureUserRole:user')->group(function(){
         Route::get('/', [UserDashboardController::class, 'index'])->name('dashboard');
     });
 
-    Route::prefix('admin')->name('admin.')->group(function(){
+    Route::prefix('admin')->name('admin.')->middleware('ensureUserRole:admin')->group(function(){
         Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
         Route::patch('/{checkout}/update', [AdminDashboardController::class, 'updatePaid'])->name('update.paid');
 

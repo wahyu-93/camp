@@ -27,7 +27,7 @@
                     <a href="#" data-bs-toggle="dropdown" id="dropdownMenuLink" aria-expanded="false">
                         Halo, {{ auth()->user()->name }} !
                         @if(auth()->user()->avatar)
-                            <img src="{{ url(auth()->user()->avatar) }}" class="user-photo" alt="nopict">
+                            <img src="{{ Storage::url(auth()->user()->avatar) }}" class="user-photo" alt="nopict">
                         @else
                             <img src="{{ url('https://ui-avatars.com/api/?name=' . auth()->user()->name) }}"  class="user-photo" alt="nopict">
                         @endif
@@ -38,7 +38,7 @@
                             </li>
 
                             <li>
-                                <a href="" class="dropdown-item text-end">My Profile</a>
+                                <a href="{{ route('profile.edit') }}" class="dropdown-item text-end">My Profile</a>
                             </li>
 
                             @if(auth()->user()->is_admin)

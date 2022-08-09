@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\DiscountController;
+use App\Http\Controllers\BiodataController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\UserDashboardController;
@@ -42,6 +43,11 @@ Route::middleware(['auth'])->group(function(){
 
         // discount
         Route::resource('discount', DiscountController::class);        
+    });
+
+    Route::prefix('profile')->name('profile.')->group(function(){
+        Route::get('/edit', [BiodataController::class, 'edit'])->name('edit');
+        Route::put('/update/{user}', [BiodataController::class, 'update'])->name('update');
     });
 });
 

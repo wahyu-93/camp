@@ -46,4 +46,17 @@ class BiodataController extends Controller
 
         return back()->with('success', 'Biodata Has Been Update');
     }
+    
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'password'  => 'required|alpha_num'
+        ]);
+
+        auth()->user()->update([
+            'password' => bcrypt($request->password)
+        ]);
+
+        return back()->with('success', 'Password Has Been Update');
+    }
 }

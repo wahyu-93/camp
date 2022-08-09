@@ -48,6 +48,7 @@ Route::middleware(['auth'])->group(function(){
     Route::prefix('profile')->name('profile.')->group(function(){
         Route::get('/edit', [BiodataController::class, 'edit'])->name('edit');
         Route::put('/update/{user}', [BiodataController::class, 'update'])->name('update');
+        Route::put('updatePassword', [BiodataController::class, 'updatePassword'])->name('update.password');
     });
 });
 

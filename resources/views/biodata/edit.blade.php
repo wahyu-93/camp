@@ -55,7 +55,7 @@
 
                                         <div class="form-group mt-2">
                                             <label for="address">Address</label>
-                                            <textarea name="address" id="address" rows="5" class="form-control @error('occupation') is-invalid @enderror" style="resize: none">{{ $user->address ?? old('occupation') }}</textarea>
+                                            <textarea name="address" id="address" rows="5" class="form-control @error('address') is-invalid @enderror" style="resize: none">{{ $user->address ?? old('occupation') }}</textarea>
                                         </div>
                                     </div>
 
@@ -74,7 +74,29 @@
                 <div class="card">
                     <div class="card-header">Change Password</div>
                     <div class="card-body">
-                        adadad
+                        <form action="{{ route('profile.update.password') }}" method="POST">
+                            @csrf
+                            @method('put')
+                            
+                            <div class="form-group mb-3">
+                                <label for="email">Name</label>
+                                <input type="email" name="email" id="email" class="form-control @error('email') is-invalid @enderror" value="{{ $user->email ?? old('email') }}" readonly>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="password">New Password</label>
+                                <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror">
+
+                                @error('password')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <div class="d-flex flex-row-reverse">
+                                <input type="submit" value="Update Password" class="btn btn-success btn-sm">
+                            </div>
+                            
+                        </form>
                     </div>
                 </div>
             </div>
